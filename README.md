@@ -1,4 +1,4 @@
-1. Use brave cause it's faster (less cpu) than chrome. Can disable the annoying download shelf at the bottom
+1. Use brave cause it's faster (less cpu) than chrome. Can disable the annoying download shelf at the bottom in brave://flags
 
 2. Get spellbee extension for auto-correct on otranscribe. You can import my typos to it from the .csv file
 
