@@ -8,7 +8,7 @@ from send2trash import send2trash
 model_name = 'base.en'
 #tiny.en is fast but shit, use only for testing
 #base.en is 1.5x slower, but better
-#small.en 2.5x slower than base.en, but the best
+#small.en is 2.5x slower than base.en, but the best
 #medium.en cannot be handled by my shit 4GB RAM laptop
 
 #pink,red,yellow,green,blue,violet,end
