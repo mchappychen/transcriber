@@ -6,10 +6,10 @@ from docx.shared import Pt
 from send2trash import send2trash
 
 model_name = 'base.en'
-#tiny.en takes 40s to transcribe but it's shit, use only for testing
-#base.en takes 44s to transcribe and it's better
-#small.en takes 120s to transcribe and it looks just as good as base.en? should be better tho
-#medium.en cannot be handled by my shit 4GB RAM 
+#tiny.en is fast but shit, use only for testing
+#base.en is 1.5x slower, but better
+#small.en 2.5x slower than base.en, but the best
+#medium.en cannot be handled by my shit 4GB RAM laptop
 
 #pink,red,yellow,green,blue,violet,end
 class c:
