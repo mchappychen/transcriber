@@ -23,7 +23,7 @@ If you just want to use the oTranscribe helper:
 - Import my list of spelling corrections for SpellBee 
 - Disable spellbee extension on sites you don't want it on in their options
 
-Tips:
+Personal Transcribing Tips:
 1. If you use Brave browser, you can disable the annoying download shelf at the bottom: ![ss](https://i.imgur.com/CWkjmWe.png)
 
 2. Have a drink next to you, make sure room-temp is hot enough for your fingers to move faster.
