@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Capitalize Selection
-// @version      1
+// @version      1.1
 // @description  Adds hotkey Cmd+e to capitalize a line in otranscribe
 // @author       Michael
 // @match        https://otranscribe.com/
@@ -11,16 +11,24 @@
 
 (function() {
 
-
+    //Wait a bit for page to load before modifying its content
     setTimeout(function(){
-    //Enlarge editing pad
-    $('#textbox').css('width','900px');
-    //Move right-panel to the right
-    $('.text-panel').css('left','calc(50% + 550px)');
-    //Make the upload-audio section smaller
-    $('.input .active').css('margin','5px auto');
-    $('.alt-input-button').css('display','none');
-    },1000);
+        //Enlarge editing pad
+        $('#textbox').css('width','900px');
+        //Move right-panel to the right
+        $('.text-panel').css('left','calc(50% + 550px)');
+        //Make the upload-audio section smaller
+        $('.input.active').css('margin','5px auto');
+        $('.alt-input-button').css('display','none');
+        //Make button bigger for easier drag-drop
+        $('.file-input-wrapper').css('width','90%');
+        $('.file-input-wrapper').css('margin','1px auto 1px');
+        $('#textbox').css('margin','10px auto');
+        $('.btn-file-input').css('height','200px');
+        //Hide the stupid text below the file input button
+        $('#formats').css('display','none');
+        $('#lastfile').css('display','none');
+    },500);
 
 
     document.addEventListener('keydown', (event) => {
@@ -30,7 +38,7 @@
             var sel = window.getSelection();
 
             if(sel.anchorNode.nodeValue == sel.anchorNode.nodeValue.toUpperCase()){
-                let lowerCase = sel.anchorNode.nodeValue.toLowerCase().replaceAll(' i ',' I ').replaceAll(/(^|[.!?]\s+)([a-z])/g, function (m, $1, $2) {
+                let lowerCase = sel.anchorNode.nodeValue.toLowerCase().replaceAll(' i ',' I ').replaceAll(" i've "," I've ").replaceAll(/(^|[.!?]\s+)([a-z])/g, function (m, $1, $2) {
                         return $1 + $2.toUpperCase();
                     });
                 sel.anchorNode.nodeValue = lowerCase;
