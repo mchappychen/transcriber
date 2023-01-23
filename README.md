@@ -1,4 +1,4 @@
-Stuff I use to help me transcribe
+Stuff I use to help me transcribe. I'll try to make this more user-friendly when other people actually want to learn how to use this
 
 Auto-transcriber does:
 - Auto-transcribes .mp3, .m4a, .wma files, outputs it into .docx
