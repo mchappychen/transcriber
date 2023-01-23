@@ -37,6 +37,7 @@ Currently working on:
 - Formatting auto-transcriber's output better
 - Adding a scribe tutorial for oTranscribe
 - Add support for .wav files
+- Export oTranscribe pad as .rtf or .docx
 
 Future ideas I probably won't work on:
 - Re-training a Whisper model to fit your own audios
