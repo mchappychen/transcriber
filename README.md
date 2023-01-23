@@ -36,6 +36,7 @@ Currently working on:
 - Smart auto-correction algorithm by guessing what you were trying to type
 - Formatting auto-transcriber's output better
 - Adding a scribe tutorial for oTranscribe
+- Add support for .wav files
 
 Future ideas I probably won't work on:
 - Re-training a Whisper model to fit your own audios
