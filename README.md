@@ -19,7 +19,7 @@ If you want to use the auto-transcriber:
 
 If you just want to use the oTranscribe helper:
 - Get the SpellBee and Tampermonkey extension
-- Install oTranscribe.user.js into tampermonkey
+- Install oTranscribe.user.js into tampermonkey (click the [raw] button in https://github.com/mchappychen/transcriber/blob/main/otranscribe.user.js)
 - Import my list of spelling corrections for SpellBee 
 - Disable spellbee extension on sites you don't want it on in their options
 
