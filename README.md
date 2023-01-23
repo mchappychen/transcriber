@@ -30,7 +30,7 @@ Tips:
 
 3. If you made a spelling mistake, you can add it to Spellbee so that it'll be auto-corrected next time.
 
-4. oTranscribe has hotkeys to pause/skip backwards. You can change to hotkeys as well
+4. oTranscribe has hotkeys to pause/skip backwards. You can change the hotkeys as well
 
 Currently working on:
 - Smart auto-correction algorithm by guessing what you were trying to type
