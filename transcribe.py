@@ -1,4 +1,4 @@
-import time, os, re, subprocess
+import time, os, re, subprocess, datetime
 import numpy as np
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
@@ -8,6 +8,7 @@ from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4
 from mutagen.asf import ASF
 from mutagen.wave import WAVE
+import nltk
 
 model_name = 'base.en'
 #tiny.en is fast but bad, use only for testing
@@ -54,7 +55,36 @@ def get_length(filename):
 		print(f'{c.red}{filename} Error:{e}{c.blue}')
 	return None
 
-while input(f'{c.green}Press any key to start next batch...{c.blue}'):
+#Extracts names from text
+def get_human_names(text):
+	try:
+		person_list = []
+		tokens = nltk.tokenize.word_tokenize(text)
+		pos = nltk.pos_tag(tokens)
+		sentt = nltk.ne_chunk(pos, binary = False)
+		person = []
+		name = ""
+		for subtree in sentt.subtrees(filter=lambda t: t.label() == 'PERSON'):
+			for leaf in subtree.leaves():
+				person.append(leaf[0])
+			if len(person) > 1: #avoid grabbing lone surnames
+				for part in person:
+					name += part + ' '
+				if name[:-1] not in person_list:
+					person_list.append(name[:-1])
+				name = ''
+			person = []
+	except LookupError:
+		print(f'{c.yellow}Downloading nltk stuff (one time only)...{c.blue}')
+		nltk.download('punkt')
+		nltk.download('averaged_perceptron_tagger')
+		nltk.download('maxent_ne_chunker')
+		nltk.download('words')
+		nltk.download('omw-1.4')
+		person_list = get_human_names(text)
+	return person_list
+
+while input(f'{c.green}Enter any key to start next batch...{c.blue}'):
 
 	#get all mp3 files
 	files = [f for f in os.listdir('.') if os.path.isfile(f) and f[-4:].lower() in ['.mp3','.m4a','.wma','.wav']]
@@ -62,7 +92,8 @@ while input(f'{c.green}Press any key to start next batch...{c.blue}'):
 	#transcribe each file
 	for file in files:
 
-		print(f'{c.blue}Transcribing: {c.pink}{file} {c.blue}File length: {c.pink}{get_length(file)}s {c.blue}... (~{c.pink}{predict(get_length(file))}s{c.blue}){c.end}')
+		length = get_length(file)
+		print(f'{c.blue}Transcribing: {c.pink}{file} {c.blue}Length: {c.pink}{length//60}:{length%60}{c.blue}... (~{c.pink}{predict(length)}s{c.blue}){c.end}')
 
 		#Convert .wma to .mp3 (for otranscribe)
 		if file[-4:].lower() == '.wma':
@@ -71,15 +102,16 @@ while input(f'{c.green}Press any key to start next batch...{c.blue}'):
 
 		start = time.time()
 		#transcribe
-		result = model.transcribe(file,fp16=False,language='English',temperature=0.2)
+		result = model.transcribe(file,fp16=False,language='English',temperature=0)
 
 		#Gets rid of the weird space in the beginning
 		output = result['text'][1:]
 
 		#Add content to word doc
 		document = Document()
-		document.add_paragraph(f'{file[:-4]}\n\nTranscriber - Michael Chen\n\n\n\n')
-		
+		document.add_paragraph(f'{file[:-4]}\n\nTranscriber - Michael Chen\n')
+		texts = []
+
 		#Format output better
 		output = output.split('? ')
 		for x in range(len(output)):
@@ -88,7 +120,17 @@ while input(f'{c.green}Press any key to start next batch...{c.blue}'):
 				text += '?'
 				if x > 0:
 					text = '.\n\n'.join(text.rsplit('. ',1))
-			p = document.add_paragraph(text)
+			#Find names
+			if 'name' in text:
+				names = get_human_names(text)
+				if len(names):
+					#if there are names, add it to beginning
+					for name in names:
+						document.add_paragraph(f'(man) {name} - \n')
+			texts.append(text)
+
+		for text in texts:
+			document.add_paragraph(text)
 
 		#style the document
 		for paragraph in document.paragraphs:
@@ -101,8 +143,8 @@ while input(f'{c.green}Press any key to start next batch...{c.blue}'):
 
 		print(f'{c.blue}Done. Time took: {c.green}{round(time.time()-start)}s{c.end}')
 		data.write(f'\n{get_length(file)},{round(time.time()-start)},{file[-3:]}')
-
-		# subprocess.call(['open',file[:-4]+'.docx'])
+		data.flush() #flush the buffer from data.write into the file
+		# subprocess.call(['open',file[:-4]+'.docx']) #this auto-opens a file
 
 	#trash all the .wma files
 	for file in files:
