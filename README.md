@@ -2,6 +2,7 @@
 
 ### Auto-transcriber does:
 - Auto-transcribes .mp3, .m4a, .wma, .wav files, outputs it into .docx
+- Formats the output the way I like
 - Converts .wma into .mp3 so you can use it on oTranscribe
 - haven't tested this on windows
 
@@ -32,9 +33,8 @@ Personal Transcribing Tips:
 
 Currently working on:
 - Adding a scribe tutorial for oTranscribe
-- Find a way to extract names from a file
 
-Future ideas I probably won't work on:
+Ideas I have but won't work on:
 - Re-training a Whisper model to fit your own audios
 - My own webpage that'll combine all the features in this project
 - Export oTranscribe pad as .rtf or .docx
