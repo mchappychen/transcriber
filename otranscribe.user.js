@@ -23,14 +23,21 @@
         //Make button bigger for easier drag-drop
         $('.file-input-wrapper').css('width','90%');
         $('.file-input-wrapper').css('margin','1px auto 1px');
+        $('.file-input-wrapper').css('outlineStyle','dashed');
+        $('.file-input-wrapper').css('outline-color','black');
+        $('.file-input-wrapper').css('outlineWidth','2px');
         $('#textbox').css('margin','10px auto');
         $('.btn-file-input').css('height','200px');
+        $('button.btn-file-input')[0].childNodes[1].nodeValue = 'Drag-Drop File Here' //WTF??
         //Hide the stupid text below the file input button
         $('#formats').css('display','none');
         $('#lastfile').css('display','none');
-    },500);
+        //Increase font size to size 12 in google docs
+        $('#textbox').css('font-size','17px');
+    },400);
 
-
+    // space,?!. for auto-correction
+    let puncs = [' ','?','!','.'];
     document.addEventListener('keydown', (event) => {
         // Detect if shift+e is pressed
         if (event.key == 'e' && event.metaKey) {
@@ -68,6 +75,6 @@
                 }
             }
             */
-        }
+        } 
     })
 })();
