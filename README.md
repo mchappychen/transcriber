@@ -1,23 +1,23 @@
-Stuff I use to help me transcribe. I'll try to make this more user-friendly when other people actually want to learn how to use this
+## Auto-transcribing tools
 
-Auto-transcriber does:
-- Auto-transcribes .mp3, .m4a, .wma files, outputs it into .docx
+### Auto-transcriber does:
+- Auto-transcribes .mp3, .m4a, .wma, .wav files, outputs it into .docx
 - Converts .wma into .mp3 so you can use it on oTranscribe
-- idk if it works on windows
+- haven't tested this on windows
 
-oTranscribe helper does:
+### oTranscribe helper does:
 - Make transcribing pad bigger
 - Makes file upload button bigger (so you can drag-drop to it easier)
-- Cmd+E to capitalize an entire line (idk if it works on windows)
+- Cmd+E to capitalize an entire line (again, haven't tested on windows)
 
-How to use:
+## How to use:
 If you want to use the auto-transcriber:
 - Download transcribe.py into a folder
 - Install its packages with pip (python-docx, send2trash, whisper)
 - When you run it, it will find all audio files in that folder, transcribe it, and output in a .docx
 - If you don't know how to run a python file, don't bother using this. I don't want you to make a mistake.
 
-If you just want to use the oTranscribe helper:
+## If you just want to use the oTranscribe helper:
 - Get the SpellBee and Tampermonkey extension
 - Install oTranscribe.user.js into tampermonkey (click the [raw] button in https://github.com/mchappychen/transcriber/blob/main/otranscribe.user.js)
 - Import my list of spelling corrections for SpellBee 
@@ -26,21 +26,17 @@ If you just want to use the oTranscribe helper:
 Personal Transcribing Tips:
 1. If you use Brave browser, you can disable the annoying download shelf at the bottom: ![ss](https://i.imgur.com/CWkjmWe.png)
 
-2. Have a drink next to you, make sure room-temp is hot enough for your fingers to move faster.
+2. If you made a spelling mistake, you can add it to Spellbee so that it'll be auto-corrected next time.
 
-3. If you made a spelling mistake, you can add it to Spellbee so that it'll be auto-corrected next time.
-
-4. oTranscribe has hotkeys to pause/skip backwards. You can change the hotkeys as well
+3. oTranscribe has hotkeys to pause/skip backwards. You can change the hotkeys as well
 
 Currently working on:
-- Smart auto-correction algorithm by guessing what you were trying to type
-- Formatting auto-transcriber's output better
 - Adding a scribe tutorial for oTranscribe
-- Add support for .wav files
-- Export oTranscribe pad as .rtf or .docx
+- Find a way to extract names from a file
 
 Future ideas I probably won't work on:
 - Re-training a Whisper model to fit your own audios
 - My own webpage that'll combine all the features in this project
+- Export oTranscribe pad as .rtf or .docx
 - Exporting .csv file of typos for Spellbee for all the mistakes made in oTransribe
 
