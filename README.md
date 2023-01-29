@@ -14,7 +14,7 @@
 ## How to use:
 If you want to use the auto-transcriber:
 - Download transcribe.py into a folder
-- Install its packages with pip (python-docx, send2trash, whisper)
+- Install its packages with pip (python-docx, send2trash, whisper, nltk)
 - When you run it, it will find all audio files in that folder, transcribe it, and output in a .docx
 - If you don't know how to run a python file, don't bother using this. I don't want you to make a mistake.
 
