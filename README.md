@@ -1,4 +1,4 @@
-## Auto-transcribing tools
+## Transcribing tools
 
 ### Auto-transcriber does:
 - Auto-transcribes .mp3, .m4a, .wma, .wav files, outputs it into .docx
