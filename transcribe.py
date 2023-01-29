@@ -4,6 +4,10 @@ from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt
 from send2trash import send2trash #I use this to send .wma to trash
+from mutagen.mp3 import MP3
+from mutagen.mp4 import MP4
+from mutagen.asf import ASF
+from mutagen.wave import WAVE
 
 model_name = 'base.en'
 #tiny.en is fast but bad, use only for testing
@@ -29,64 +33,81 @@ import whisper
 print(f'{c.blue}loading model {model_name} ... (~2s){c.end}')
 model = whisper.load_model(model_name)
 
-#get all mp3 files
-files = [f for f in os.listdir('.') if os.path.isfile(f) and f[-4:].lower() in ['.mp3','.m4a','.wma']]
-
-#TODO -- add support for .WAV
+data = open('data.csv','a')
 
 #Prediction models for how long a model will take based on previous data
-def predict(type,size,mname='base.en'):
-	#size is in bytes, convert it to KB
-	size = round(size,-3)//1000
-	if type == 'mp3':
-		return int(round(0.016*size+52.95))
-	elif type == 'm4a':
-		return int(round(0.012*size+66.83))
-	elif type == 'wma':
-		return int(round(0.02*size+46.51))
-	else:
-		print(f'{c.red}Error: Unknown type: {type}{c.end}')
-		return 0
+def predict(length):
+	return round(0.288*length + 2.225)
 
-#transcribe each file
-for file in files:
-	print(f'{c.blue}Transcribing: {c.pink}{file} {c.blue}File size: {c.pink}{os.path.getsize(file)//1000}KB {c.blue}... (~{c.pink}{predict(file[-3:].lower(),os.path.getsize(file))}s{c.blue}){c.end}')
+#returns the length of the file
+def get_length(filename):
+	try:
+		if filename[-3:].lower() == 'mp3':
+			return round(MP3(filename).info.length)
+		elif filename[-3:].lower() == 'm4a':
+			return round(MP4(filename).info.length)
+		elif filename[-3:].lower() == 'wma':
+			return round(ASF(filename).info.length)
+		elif filename[-3:].lower() == 'wav':
+			return round(WAVE(filename).info.length)
+	except Exception as e:
+		print(f'{c.red}{filename} Error:{e}{c.blue}')
+	return None
 
-	#Convert .wma to .mp3 (for otranscribe)
-	if file[-4:].lower() == '.wma':
-		print(f'{c.blue}Converting into .mp3 in background ...')
-		os.system(f'ffmpeg -i '+ file.replace(' ','\ ') + ' '+ file[:-4].replace(' ','\ ') +'.mp3 -hide_banner -loglevel panic')
+while input(f'{c.green}Press any key to start next batch...{c.blue}'):
 
-	start = time.time()
-	#transcribe
-	result = model.transcribe(file,fp16=False,language='English',temperature=0.2)
-	print(f'{c.blue}Done. Time took: {c.green}{round(time.time()-start)}s{c.end}')
+	#get all mp3 files
+	files = [f for f in os.listdir('.') if os.path.isfile(f) and f[-4:].lower() in ['.mp3','.m4a','.wma','.wav']]
 
-	#Gets rid of the weird space in the beginning
-	output = result['text'][1:]
+	#transcribe each file
+	for file in files:
 
-	# TODO -- find ways to output better
-	# output = output.replace('?','?\n')
+		print(f'{c.blue}Transcribing: {c.pink}{file} {c.blue}File length: {c.pink}{get_length(file)}s {c.blue}... (~{c.pink}{predict(get_length(file))}s{c.blue}){c.end}')
 
-	#Add content to word doc
-	document = Document()
-	document.add_paragraph(f'{file[:-4]}\n\nTranscriber - Michael Chen\nEmail: mchappychen@gmail.com\nPhone: 614-940-1914\n')
-	p = document.add_paragraph(output)
+		#Convert .wma to .mp3 (for otranscribe)
+		if file[-4:].lower() == '.wma':
+			print(f'{c.blue}Converting into .mp3 in background ...')
+			os.system(f'ffmpeg -i '+ file.replace(' ','\ ') + ' '+ file[:-4].replace(' ','\ ') +'.mp3 -hide_banner -loglevel panic')
 
-	#style the document
-	for paragraph in document.paragraphs:
-		paragraph.style = document.styles['Normal']
-		for run in paragraph.runs:
-			run.font.size = Pt(16)
-			run.font.name = 'Arial'
+		start = time.time()
+		#transcribe
+		result = model.transcribe(file,fp16=False,language='English',temperature=0.2)
 
-	document.save(f'{file[:-4]}.docx')
-	# subprocess.call(['open',file[:-4]+'.docx'])
+		#Gets rid of the weird space in the beginning
+		output = result['text'][1:]
 
-#trash all the .wma files
-for file in files:
-	if file[-4:].lower() == '.wma':
-		print(f'{c.blue}Moving {c.pink}{file}{c.blue} to trash{c.end}')
-		send2trash(file)
+		#Add content to word doc
+		document = Document()
+		document.add_paragraph(f'{file[:-4]}\n\nTranscriber - Michael Chen\n\n\n\n')
+		
+		#Format output better
+		output = output.split('? ')
+		for x in range(len(output)):
+			text = output[x]
+			if x < len(output)-1:
+				text += '?'
+				if x > 0:
+					text = '.\n\n'.join(text.rsplit('. ',1))
+			p = document.add_paragraph(text)
+
+		#style the document
+		for paragraph in document.paragraphs:
+			paragraph.style = document.styles['Normal']
+			for run in paragraph.runs:
+				run.font.size = Pt(16)
+				run.font.name = 'Arial'
+
+		document.save(f'{file[:-4]}.docx')
+
+		print(f'{c.blue}Done. Time took: {c.green}{round(time.time()-start)}s{c.end}')
+		data.write(f'\n{get_length(file)},{round(time.time()-start)},{file[-3:]}')
+
+		# subprocess.call(['open',file[:-4]+'.docx'])
+
+	#trash all the .wma files
+	for file in files:
+		if file[-4:].lower() == '.wma':
+			print(f'{c.blue}Moving {c.pink}{file}{c.blue} to trash{c.end}')
+			send2trash(file)
 
 
