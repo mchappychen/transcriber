@@ -33,6 +33,7 @@ Personal Transcribing Tips:
 
 Currently working on:
 - Adding a scribe tutorial for oTranscribe
+- Optimizing "temperature" parameter for whisper's model
 
 Ideas I have but won't work on:
 - Re-training a Whisper model to fit your own audios
