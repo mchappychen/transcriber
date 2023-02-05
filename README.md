@@ -39,6 +39,8 @@ Personal Transcribing Tips:
 
 3. oTranscribe has hotkeys to pause/skip backwards. You can change the hotkeys as well
 
+4. oTranscribe can't export as .docx or .rtf (yet) so just copy-paste it into Google Docs or Word to export it
+
 Currently working on:
 - Adding a tutorial for oTranscribe
 
