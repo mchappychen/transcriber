@@ -2,7 +2,7 @@
 
 ### Auto-transcriber does:
 - Auto-transcribes .mp3, .m4a, .wma, .wav files, outputs it into .docx
-- Formats the output the way I like
+- Formats the output into question-answer
 - Converts .wma into .mp3 so you can use it on oTranscribe
 - haven't tested this on windows
 
